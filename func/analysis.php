@@ -19,7 +19,7 @@ function validation($choosen_word, $discovered_letters, $attemps, $max_attemps){
     }else {
         $attemps++;
 
-        echo "Incorrect letter, you have: " . (MAX_ATTEMPS - $attemps) . " attemps\n";
+        echo "Incorrect letter, you have: " . ($max_attemps - $attemps) . " attemps\n";
         sleep(2);
     }
 

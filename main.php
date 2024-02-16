@@ -8,8 +8,11 @@ function main(){
     include __DIR__ . '/func/clear.php';
     include __DIR__ . '/func/hangman.php';
 
+    $running = true;
+
     //main loop
-    while ($attemps < MAX_ATTEMPS && $discovered_letters != $choosen_word) {
+    while ($running) {
+
         //Initialization
         echo "...HANGMAN GAME...";
         echo "\n\n";
@@ -23,26 +26,43 @@ function main(){
         echo "\n\n";
 
         //Validation
-        $arr_result = validation($choosen_word, $discovered_letters, $attemps, MAX_ATTEMPS);
+        $arr_result = validation($choosen_word, $discovered_letters, $attemps, $max_attemps);
 
         //Assign the returned values from the validation function
         $discovered_letters = $arr_result[0];
         $attemps = $arr_result[1];
-        $arr_result[2] = MAX_ATTEMPS;
+        $max_attemps = $arr_result[2];
 
         sleep(1);
         clean_screen();
+
+        //Final Message
+        if ($attemps < $max_attemps && $discovered_letters == $choosen_word) {
+            echo "CONGRATULATIONS!, YOU FIND THE WORD\n\n";
+
+            $restart = readline("Do you want to keep playing ?(Y/n): ");
+            $restart = strtolower($restart);
+            echo "\n\n";
+        
+            if ($restart !== "y"){
+                $running = false;
+            }
+
+            //Changing the word and empty cells
+            $choosen_word = $words_arr[rand(0, (count($words_arr) - 1))];
+            $choosen_word = strtolower($choosen_word);
+            $word_length = strlen($choosen_word);
+        
+            $discovered_letters = str_pad("", $word_length, "_");
+
+        }elseif ($attemps == $max_attemps) {
+            echo "YOU LOSE!, TRY AGAIN.\n\n";
+            $running = false;
+        }
     }
 
-    //Final Message
-    if ($attemps < MAX_ATTEMPS) {
-        echo "CONGRATULATIONS!, YOU FIND THE WORD\n\n";
-    }else {
-        echo "YOU LOSE!, TRY AGAIN.\n\n";
-    }
-
-    echo "The word is: $choosen_word \n";
-    echo "You discovered: $discovered_letters \n";
+    echo "The word is: $choosen_word \n\n";
+    echo "You discovered: $discovered_letters \n\n";
 }
 
 main();
