@@ -6,6 +6,7 @@ function main(){
     include __DIR__ . '/config/cfg.php'; //This Include the relative path in dynamic form of the cfg code in the current file wherever it is.
     include __DIR__ . '/func/analysis.php';
     include __DIR__ . '/func/clear.php';
+    include __DIR__ . '/func/hangman.php';
 
     //main loop
     while ($attemps < MAX_ATTEMPS && $discovered_letters != $choosen_word) {
@@ -14,6 +15,9 @@ function main(){
         echo "\n\n";
 
         echo "Your word have $word_length letters\n\n";
+
+        hangman_sprite($attemps);
+        echo "\n\n";
 
         echo "   " . $discovered_letters . "   ";
         echo "\n\n";
