@@ -7,6 +7,7 @@ function main(){
     include __DIR__ . '/func/analysis.php';
     include __DIR__ . '/func/clear.php';
     include __DIR__ . '/func/hangman.php';
+    include __DIR__ . '/func/restart.php';
 
     $running = true;
 
@@ -40,24 +41,39 @@ function main(){
         if ($attemps < $max_attemps && $discovered_letters == $choosen_word) {
             echo "CONGRATULATIONS!, YOU FIND THE WORD\n\n";
 
-            $restart = readline("Do you want to keep playing ?(Y/n): ");
-            $restart = strtolower($restart);
-            echo "\n\n";
+            //Restarting the loop
+            $running = restart_loop();
+
+            if ($running == true) {
+                //Changing the word and empty cells
+                $choosen_word = $words_arr[rand(0, (count($words_arr) - 1))];
+                $choosen_word = strtolower($choosen_word);
+                $word_length = strlen($choosen_word);
         
-            if ($restart !== "y"){
-                $running = false;
+                $discovered_letters = str_pad("", $word_length, "_");
+                $attemps = 0;
+                $max_attemps = 6;
+                sleep(1);
+                clean_screen();
             }
-
-            //Changing the word and empty cells
-            $choosen_word = $words_arr[rand(0, (count($words_arr) - 1))];
-            $choosen_word = strtolower($choosen_word);
-            $word_length = strlen($choosen_word);
-        
-            $discovered_letters = str_pad("", $word_length, "_");
-
         }elseif ($attemps == $max_attemps) {
             echo "YOU LOSE!, TRY AGAIN.\n\n";
-            $running = false;
+            
+            //Restarting the loop
+            $running = restart_loop();
+
+            if ($running == true) {
+                //Changing the word and empty cells
+                $choosen_word = $words_arr[rand(0, (count($words_arr) - 1))];
+                $choosen_word = strtolower($choosen_word);
+                $word_length = strlen($choosen_word);
+                    
+                $discovered_letters = str_pad("", $word_length, "_");
+                $attemps = 0;
+                $max_attemps = 6;
+                sleep(1);
+                clean_screen();
+            }
         }
     }
 
